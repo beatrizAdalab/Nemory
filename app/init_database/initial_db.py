@@ -22,7 +22,7 @@ def execute_adding_data():
     words_count = Word.query.count()
     users_count = User.query.count()
     if words_count > 0:
-        print('initial database loaded')
+        print('initial words loaded in database')
     else:
         for item in lexicon:
             term = item.get("term")
@@ -36,7 +36,7 @@ def execute_adding_data():
         print('words_added')
 
     if users_count > 0:
-        print('initial database loaded')
+        print('initial users loaded in database')
     else:
         for item in users:
             name = item.get("name")
