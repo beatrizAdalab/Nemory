@@ -7,6 +7,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+from werkzeug.security import generate_password_hash
+from ..ext.api_avatar import create_avatar
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 sqlite_url = "sqlite:////" + os.path.join(basedir, "../nemory.db")
 
@@ -42,8 +45,11 @@ def execute_adding_data():
             name = item.get("name")
             lastname = item.get("lastname")
             email = item.get("email")
+            password_user = item.get("password")
+            password = generate_password_hash(password_user, method='sha256')
+            avatar = create_avatar(name, lastname)
 
-            new_user = User(name, lastname,email)
+            new_user = User(name, lastname, email, password, avatar)
             new_user.add()
         print('users_added')
 

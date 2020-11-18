@@ -1,5 +1,12 @@
+import jwt
+import datetime
+
 from ..models import User, user_schema
-from ..ext.api_avatar import response
+from werkzeug.security import generate_password_hash, check_password_hash
+from ..ext.api_avatar import create_avatar
+from flask import jsonify, make_response
+from config import Config
+
 
 def get_all_users():
     users = User.get_all()
@@ -12,9 +19,10 @@ def get_one_user(id):
     return user_schema.dump(user)
 
 
-def create_new_user(name,lastname, email):
-    print(response.content)
-    user = User(name, lastname, email)
+def create_new_user(name,lastname, email, password):
+    password = generate_password_hash(password, method='sha256')
+    avatar = create_avatar(name, lastname)
+    user = User(name, lastname, email, password, avatar)
     User.add(user)
 
     user = User.get_filter_one('email', email)
@@ -40,6 +48,23 @@ def delete_user(id):
     User.delete(user)
 
     return deleted_user
+
+
+def login_user(name, password):
+    if not name or not password:
+        return {'status login':'could not verify, fill in the complete form', 'authentication': 'login required'}
+
+    user_by_name = User.get_filter_one('name', name)
+    user = user_schema.dump(user_by_name)
+
+    if check_password_hash(user['password'], password):
+        token = jwt.encode(
+            {'public_id': user['id_user'], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+            Config.SECRET_KEY)
+        return token.decode('UTF-8')
+
+    return {'status login':'could not verify', 'authentication': 'login required'}
+
 
 
 

@@ -2,10 +2,12 @@ users = [
             {
                 "name": "Tom",
                 "lastname": "Janu",
-                "email":"tom@email.com"
+                "email":"tom@email.com",
+                "password":"batata23"
             }, {
                 "name": "Lucas",
                 "lastname": "Villanueva",
-                "email":"lucas@email.com"
+                "email":"lucas@email.com",
+                "password":"nemory23"
             }
         ]

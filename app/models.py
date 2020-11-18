@@ -72,15 +72,19 @@ class Word(db.Model, BaseModelMixin):
 class User(db.Model, BaseModelMixin):
     __table_name__ = '__users__'
     id_user = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250))
+    name = db.Column(db.String(250), unique=True)
     lastname = db.Column(db.String(250))
     email = db.Column(db.String(250), unique=True)
+    password = db.Column(db.String(20), unique=True)
+    avatar = db.Column(db.String(250))
     activity = db.relationship('Activity', backref='users', lazy='dynamic', cascade="all, delete-orphan")
 
-    def __init__(self, name, lastname, email):
+    def __init__(self, name, lastname, email, password, avatar):
         self.name = name
         self.lastname = lastname
         self.email = email
+        self.password = password
+        self.avatar = avatar
 
     def __repr__(self):
         return f'User({self.id_user})'
@@ -123,6 +127,8 @@ class UserSchema(ma.Schema):
     name = fields.String(required=True)
     lastname = fields.String(required=True)
     email = fields.Email(required=True)
+    password = fields.String(required=True)
+    avatar = fields.String(required=False)
 
 
 user_schema = UserSchema()
