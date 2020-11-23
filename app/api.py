@@ -64,14 +64,16 @@ def filter_word_view():
 
 # endpoint to show all users
 @app.route("/nemory/api/v1.0/users", methods=["GET"])
-def users_view():
+@token_required
+def users_view(f):
     result = controller_users.get_all_users()
     return jsonify({"users": result})
 
 
 # endpoint to get user detail by id
 @app.route("/nemory/api/v1.0/user/<id>", methods=["GET"])
-def user_view(id):
+@token_required
+def user_view(f, id):
     result = controller_users.get_one_user(id)
     return jsonify({"user": result})
 
@@ -89,17 +91,20 @@ def new_user_view():
 
 # endpoint to update user
 @app.route("/nemory/api/v1.0/user/<id>", methods=["PUT"])
-def update_user_view(id):
+@token_required
+def update_user_view(f, id):
     name = request.json.get('name')
     lastname = request.json.get('lastname')
     email = request.json.get('email')
-    update_user = controller_users.update_user(id, name, lastname, email)
+    password = request.json.get('password')
+    update_user = controller_users.update_user(id, name, lastname, email, password)
     return jsonify({"update_user": update_user})
 
 
 # endpoint to delete user
 @app.route("/nemory/api/v1.0/user/<id>", methods=["DELETE"])
-def delete_user_view(id):
+@token_required
+def delete_user_view(f, id):
     deleted_user = controller_users.delete_user(id)
     return jsonify({'result': 'success', 'deleted_user': deleted_user})
 

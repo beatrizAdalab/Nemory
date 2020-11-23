@@ -31,12 +31,13 @@ def create_new_user(name,lastname, email, password):
     return new_user
 
 
-def update_user(id,name,lastname,email):
+def update_user(id,name,lastname,email, password):
     user = User.get_by_id(id)
 
     user.name = name if name else user.name
     user.lastname = lastname if lastname else user.lastname
     user.email = email if email else user.email
+    user.password = password if password else user.generate_password_hash(password, method='sha256')
 
     User.save(user)
     return user_schema.dump(user)

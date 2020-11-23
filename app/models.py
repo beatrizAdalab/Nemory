@@ -75,7 +75,7 @@ class User(db.Model, BaseModelMixin):
     name = db.Column(db.String(250), unique=True)
     lastname = db.Column(db.String(250))
     email = db.Column(db.String(250), unique=True)
-    password = db.Column(db.String(20), unique=True)
+    password = db.Column(db.String(20))
     avatar = db.Column(db.String(250))
     activity = db.relationship('Activity', backref='users', lazy='dynamic', cascade="all, delete-orphan")
 
