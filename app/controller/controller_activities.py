@@ -1,6 +1,4 @@
-from sqlalchemy import true, false
 from ..models import Activity, activity_schema
-from flask import request, jsonify
 
 
 def get_all_activities():

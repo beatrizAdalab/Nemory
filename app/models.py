@@ -32,12 +32,12 @@ class BaseModelMixin:
         return cls.query.get(id)
 
     @classmethod
-    def get_filter_one(cls, key,value):
-        final_arg = {key:value}
+    def get_filter_one(cls, key, value):
+        final_arg = {key: value}
         return cls.query.filter_by(**final_arg).first()
 
     @classmethod
-    def get_filter_all(cls, key,value):
+    def get_filter_all(cls, key, value):
         final_arg = {key: value}
         return cls.query.filter_by(**final_arg).all()
 
@@ -103,7 +103,7 @@ class Activity(db.Model, BaseModelMixin):
     payload = db.Column(db.String)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __init__(self, id_user,term,result,action, payload):
+    def __init__(self, id_user, term, result, action, payload):
         self.id_user = id_user
         self.term = term
         self.result = result

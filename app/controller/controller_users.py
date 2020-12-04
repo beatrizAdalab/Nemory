@@ -4,7 +4,6 @@ import datetime
 from ..models import User, user_schema
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..ext.api_avatar import create_avatar
-from flask import jsonify, make_response
 from config import Config
 
 
@@ -19,7 +18,7 @@ def get_one_user(id):
     return user_schema.dump(user)
 
 
-def create_new_user(name,lastname, email, password):
+def create_new_user(name, lastname, email, password):
     password = generate_password_hash(password, method='sha256')
     avatar = create_avatar(name, lastname)
     user = User(name, lastname, email, password, avatar)
@@ -31,7 +30,7 @@ def create_new_user(name,lastname, email, password):
     return new_user
 
 
-def update_user(id,name,lastname,email, password):
+def update_user(id, name, lastname, email, password):
     user = User.get_by_id(id)
 
     user.name = name if name else user.name
@@ -53,7 +52,7 @@ def delete_user(id):
 
 def login_user(name, password):
     if not name or not password:
-        return {'status login':'could not verify, fill in the complete form', 'authentication': 'login required'}
+        return {'status login': 'could not verify, fill in the complete form', 'authentication': 'login required'}
 
     user_by_name = User.get_filter_one('name', name)
     user = user_schema.dump(user_by_name)
@@ -64,8 +63,4 @@ def login_user(name, password):
             Config.SECRET_KEY)
         return token.decode('UTF-8')
 
-    return {'status login':'could not verify', 'authentication': 'login required'}
-
-
-
-
+    return {'status login': 'could not verify', 'authentication': 'login required'}
